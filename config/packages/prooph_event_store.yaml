@@ -1,0 +1,17 @@
+prooph_event_store:
+    stores:
+        user_store:
+            event_store: '@app.event_store.mysql'
+            repositories:
+                user_collection:
+                    repository_class: App\Infrastructure\Repository\EventBasedUserRepository
+                    aggregate_type: App\Domain\Model\User
+                    aggregate_translator: prooph_event_sourcing.aggregate_translator
+
+services:
+    _defaults:
+        public: false
+
+    Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator: ~
+    prooph_event_sourcing.aggregate_translator:
+        class: Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator

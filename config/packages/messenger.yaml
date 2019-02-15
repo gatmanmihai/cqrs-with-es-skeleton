@@ -1,0 +1,22 @@
+framework:
+    messenger:
+        transports:
+            # amqp: '%env(MESSENGER_TRANSPORT_DSN)%'
+
+        routing:
+            # 'App\Application\Command': amqp
+
+        default_bus: messenger.bus.commands
+        buses:
+            messenger.bus.commands:
+                middleware:
+                    - validation
+                    #- doctrine_transaction
+            messenger.bus.queries:
+                middleware:
+                    - validation
+            messenger.bus.events:
+                default_middleware: allow_no_handlers
+                middleware:
+                    - validation
+                    - 'App\Application\Middleware\AggregateEventStoreMiddleware'

@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        public: false
+
+    app.event_store.mysql:
+        class: Prooph\EventStore\Pdo\MariaDbEventStore
+        arguments:
+            - '@prooph_event_store.message_factory'
+            - '@app.event_store.pdo_connection.mysql'
+            - '@app.event_store.mysql.persistence_strategy'
+
+    app.event_store.pdo_connection.mysql:
+        class: PDO
+        factory: ['@database_connection', getWrappedConnection]
+
+    app.event_store.mysql.persistence_strategy:
+        class: Prooph\EventStore\Pdo\PersistenceStrategy\MariaDbSingleStreamStrategy
